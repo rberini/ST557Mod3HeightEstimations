@@ -1,0 +1,56 @@
+---
+title: "Using Data Moves to Make Sense of Height Estimates"
+author: "Robert Berini"
+format: html
+editor: visual
+---
+
+# Data Moves for Making Sense of Height Estimations
+
+At an activity posted at estimation180.com, students are asked to estimate the height of the man in this picture:
+
+![](estimation180_man_height.jpg)
+
+In considering the height, students are asked to give
+
+-   a lower limit (what would be a lower bound for the man's height)
+-   upper limit (what would be an upper bound for the man's height)
+-   a specific estimate for the height
+-   provide a rationale for their estimate
+
+## Load Required Packages
+```{r}
+library(conflicted)
+library(skimr)
+library(psych)
+library(tidyverse)
+library(janitor)
+library(knitr)
+
+conflicts_prefer(dplyr::lag)
+conflicts_prefer(dplyr::filter)
+
+options(scipen = 999, digits = 2)
+```
+
+
+## Import and Examine Data
+
+```{r}
+height_est <- read_csv("Day 01 Height Estimates from Fergussen.csv")
+```
+
+```{r}
+glimpse(height_est)
+```
+```{r}
+height_est <- height_est |>
+  mutate(Timestamp = mdy_hms(Timestamp))
+```
+
+
+## Sample Data
+
+```{r}
+
+```
