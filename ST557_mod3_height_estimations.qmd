@@ -41,11 +41,18 @@ height_est <- read_csv("Day 01 Height Estimates from Fergussen.csv")
 ```
 
 ```{r}
-glimpse(height_est)
+skim(height_est)
 ```
 ```{r}
 height_est <- height_est |>
-  mutate(Timestamp = mdy_hms(Timestamp))
+  mutate(Timestamp = mdy_hms(Timestamp)) |>
+  clean_names() |>
+  filter(!(is.na(whats_too_low) & is.na(whats_too_high) & is.na(your_estimate)))
+```
+
+
+```{r}
+glimpse(height_est)
 ```
 
 
