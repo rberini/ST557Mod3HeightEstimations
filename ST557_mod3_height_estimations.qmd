@@ -52,5 +52,13 @@ height_est <- height_est |>
 ## Sample Data
 
 ```{r}
+set.seed(557)
 
+height_est_sample <- height_est |>
+  slice_sample(n = 200)
 ```
+
+```{r}
+glimpse(height_est_sample)
+```
+
