@@ -19,12 +19,15 @@ In considering the height, students are asked to give
 -   provide a rationale for their estimate
 
 ## Load Required Packages
+
 ```{r}
 library(conflicted)
 library(skimr)
 library(psych)
 library(tidyverse)
 library(janitor)
+library(textclean)
+library(measurements)
 library(knitr)
 
 conflicts_prefer(dplyr::lag)
@@ -32,7 +35,6 @@ conflicts_prefer(dplyr::filter)
 
 options(scipen = 999, digits = 2)
 ```
-
 
 ## Import and Examine Data
 
@@ -43,6 +45,7 @@ height_est <- read_csv("Day 01 Height Estimates from Fergussen.csv")
 ```{r}
 skim(height_est)
 ```
+
 ```{r}
 height_est <- height_est |>
   mutate(Timestamp = mdy_hms(Timestamp)) |>
@@ -50,11 +53,9 @@ height_est <- height_est |>
   filter(!(is.na(whats_too_low) & is.na(whats_too_high) & is.na(your_estimate)))
 ```
 
-
 ```{r}
 glimpse(height_est)
 ```
-
 
 ## Sample Data
 
@@ -68,4 +69,31 @@ height_est_sample <- height_est |>
 ```{r}
 glimpse(height_est_sample)
 ```
+```{r}
+height_est_sample <- height_est_sample |>
+  mutate(
+    whats_too_low = str_trim(str_to_lower(whats_too_low)),
+    whats_too_high = str_trim(str_to_lower(whats_too_high)),
+    your_estimate = str_trim(str_to_lower(your_estimate)),
+    your_reasoning = str_trim(str_to_sentence(your_reasoning)),
+    your_name = str_trim(str_to_title(your_name))
+  )
+```
+
+```{r}
+skim(height_est_sample)
+```
+
+```{r}
+height_est_sample <- height_est_sample |>
+  mutate(across(c(whats_too_low, whats_too_high, your_estimate), ~ .x |>
+    str_replace_all("'|(feet?|foot|ft|feeet|toot|fot|oot)\\b", " ft ") |>
+    str_replace_all("\"|(inches?|inch|in)\\b", " inch ") |>
+    str_replace_all("(meters?|metres?)\\b", " m ") |>
+    str_replace_all("(centimeters?|centimetres?|cent|cm)\\b", " cm ") |>
+    str_replace_all("(?<!c)m\\b", " m ") |>
+    suppressWarnings(replace_number(.))
+  ))
+```
+
 
