@@ -26,7 +26,6 @@ library(skimr)
 library(psych)
 library(tidyverse)
 library(janitor)
-library(textclean)
 library(measurements)
 library(knitr)
 
@@ -69,12 +68,15 @@ height_est_sample <- height_est |>
 ```{r}
 glimpse(height_est_sample)
 ```
+
+```{r}
+height_cols <- c("whats_too_low", "whats_too_high", "your_estimate")
+```
+
 ```{r}
 height_est_sample <- height_est_sample |>
   mutate(
-    whats_too_low = str_trim(str_to_lower(whats_too_low)),
-    whats_too_high = str_trim(str_to_lower(whats_too_high)),
-    your_estimate = str_trim(str_to_lower(your_estimate)),
+    across(all_of(height_cols), ~ str_trim(str_to_lower(.x))),
     your_reasoning = str_trim(str_to_sentence(your_reasoning)),
     your_name = str_trim(str_to_title(your_name))
   )
@@ -85,15 +87,34 @@ skim(height_est_sample)
 ```
 
 ```{r}
+height_est_sample |>
+ summarise(
+   across(all_of(height_cols), 
+          list(
+            feet = ~ sum(str_detect(.x, "'|(feet?|foot|ft|feeet|toot|fot|oot)\\b"), na.rm = TRUE),
+            inch = ~ sum(str_detect(.x, "\"|(inches?|inch|in)\\b"), na.rm = TRUE),
+            meter = ~ sum(str_detect(.x, "(meters?|metres?)\\b|(?<!c)m\\b"), na.rm = TRUE),
+            cm = ~ sum(str_detect(.x, "(centimeters?|centimetres?|cent|cm)\\b"), na.rm = TRUE)
+          ),
+          .names = "{.col}_{.fn}")
+ )
+```
+
+```{r}
 height_est_sample <- height_est_sample |>
-  mutate(across(c(whats_too_low, whats_too_high, your_estimate), ~ .x |>
-    str_replace_all("'|(feet?|foot|ft|feeet|toot|fot|oot)\\b", " ft ") |>
-    str_replace_all("\"|(inches?|inch|in)\\b", " inch ") |>
+  mutate(across(c(height_cols), ~ .x |>
+    str_replace_all("'|-|(feet?|foot|ft|feeet|toot|fot|oot|feat)\\b", " ft ") |>
+    str_replace_all("\"|(inches?|inch|in|inces|invhes)\\b", " inch ") |>
     str_replace_all("(meters?|metres?)\\b", " m ") |>
     str_replace_all("(centimeters?|centimetres?|cent|cm)\\b", " cm ") |>
-    str_replace_all("(?<!c)m\\b", " m ") |>
-    suppressWarnings(replace_number(.))
+    str_replace_all("(?<!c)m\\b", " m ")
   ))
 ```
 
+```{r}
+height_est_sample |>
+  select(your_estimate) |>
+  arrange(your_estimate) |>
+  kable()
+```
 

@@ -72,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e6c60d7fcf3ec8949db442f3e532a9c0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -102,6 +102,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;family=Roboto:ital,wght@0,100..900;1,100..900&amp;display=swap');
+body {
+  font-family: " roboto",="" sans-serif;="" }="" code,="" pre="" {="" font-family:="" "roboto="" mono",="" monospace;="" }"="">
 </head>
 
 <body class="fullcontent">
@@ -167,11 +170,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✔ purrr     1.1.0     </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(textclean)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(measurements)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">conflicts_prefer</span>(dplyr<span class="sc">::</span>lag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(measurements)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">conflicts_prefer</span>(dplyr<span class="sc">::</span>lag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>[conflicted] Will prefer dplyr::lag over any other package.</code></pre>
 </div>
@@ -367,17 +369,18 @@ $ your_name      &lt;chr&gt; "Joanna", "Forrest J. S. M.", "Kaitlyn", "adsf", "g
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>height_est_sample <span class="ot">&lt;-</span> height_est_sample <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">whats_too_low =</span> <span class="fu">str_trim</span>(<span class="fu">str_to_lower</span>(whats_too_low)),</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">whats_too_high =</span> <span class="fu">str_trim</span>(<span class="fu">str_to_lower</span>(whats_too_high)),</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_estimate =</span> <span class="fu">str_trim</span>(<span class="fu">str_to_lower</span>(your_estimate)),</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_reasoning =</span> <span class="fu">str_trim</span>(<span class="fu">str_to_sentence</span>(your_reasoning)),</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_name =</span> <span class="fu">str_trim</span>(<span class="fu">str_to_title</span>(your_name))</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>height_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"whats_too_low"</span>, <span class="st">"whats_too_high"</span>, <span class="st">"your_estimate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(height_est_sample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>height_est_sample <span class="ot">&lt;-</span> height_est_sample <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">all_of</span>(height_cols), <span class="sc">~</span> <span class="fu">str_trim</span>(<span class="fu">str_to_lower</span>(.x))),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_reasoning =</span> <span class="fu">str_trim</span>(<span class="fu">str_to_sentence</span>(your_reasoning)),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_name =</span> <span class="fu">str_trim</span>(<span class="fu">str_to_title</span>(your_name))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(height_est_sample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -534,15 +537,668 @@ $ your_name      &lt;chr&gt; "Joanna", "Forrest J. S. M.", "Kaitlyn", "adsf", "g
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>height_est_sample <span class="ot">&lt;-</span> height_est_sample <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(whats_too_low, whats_too_high, your_estimate), <span class="sc">~</span> .x <span class="sc">|&gt;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"'|(feet?|foot|ft|feeet|toot|fot|oot)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" ft "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"</span><span class="sc">\"</span><span class="st">|(inches?|inch|in)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" inch "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"(meters?|metres?)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" m "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"(centimeters?|centimetres?|cent|cm)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" cm "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"(?&lt;!c)m</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" m "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">suppressWarnings</span>(<span class="fu">replace_number</span>(.))</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>height_est_sample <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">summarise</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">across</span>(<span class="fu">all_of</span>(height_cols), </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>          <span class="fu">list</span>(</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">feet =</span> <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">str_detect</span>(.x, <span class="st">"'|(feet?|foot|ft|feeet|toot|fot|oot)</span><span class="sc">\\</span><span class="st">b"</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">inch =</span> <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">str_detect</span>(.x, <span class="st">"</span><span class="sc">\"</span><span class="st">|(inches?|inch|in)</span><span class="sc">\\</span><span class="st">b"</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">meter =</span> <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">str_detect</span>(.x, <span class="st">"(meters?|metres?)</span><span class="sc">\\</span><span class="st">b|(?&lt;!c)m</span><span class="sc">\\</span><span class="st">b"</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">cm =</span> <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">str_detect</span>(.x, <span class="st">"(centimeters?|centimetres?|cent|cm)</span><span class="sc">\\</span><span class="st">b"</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>          ),</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">.names =</span> <span class="st">"{.col}_{.fn}"</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  whats_too_low_feet whats_too_low_inch whats_too_low_meter whats_too_low_cm
+               &lt;int&gt;              &lt;int&gt;               &lt;int&gt;            &lt;int&gt;
+1                120                 27                  14               15
+# ℹ 8 more variables: whats_too_high_feet &lt;int&gt;, whats_too_high_inch &lt;int&gt;,
+#   whats_too_high_meter &lt;int&gt;, whats_too_high_cm &lt;int&gt;,
+#   your_estimate_feet &lt;int&gt;, your_estimate_inch &lt;int&gt;,
+#   your_estimate_meter &lt;int&gt;, your_estimate_cm &lt;int&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>height_est_sample <span class="ot">&lt;-</span> height_est_sample <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(height_cols), <span class="sc">~</span> .x <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"'|-|(feet?|foot|ft|feeet|toot|fot|oot|feat)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" ft "</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"</span><span class="sc">\"</span><span class="st">|(inches?|inch|in|inces|invhes)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" inch "</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"(meters?|metres?)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" m "</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"(centimeters?|centimetres?|cent|cm)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" cm "</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"(?&lt;!c)m</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" m "</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `across(...)`.
+Caused by warning:
+! Using an external vector in selections was deprecated in tidyselect 1.1.0.
+ℹ Please use `all_of()` or `any_of()` instead.
+  # Was:
+  data %&gt;% select(height_cols)
+
+  # Now:
+  data %&gt;% select(all_of(height_cols))
+
+See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>height_est_sample <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(your_estimate) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(your_estimate) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">your_estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1.5 m</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1.8 m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1.8 m</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1.8 m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1.9 m</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1.93 m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">175 cm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">178 cm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">180 cm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">180 cm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">180 cm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">185 cm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">186 cm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">187</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">187 cm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">193</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">193</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">193 m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">193 cm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">193 cm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">196 cm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2 m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2 m</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2 m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2.4 m</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2.5 m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">200</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3.5 m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4 ft 2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft 10 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft 11 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft 5 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft 8 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 1/2 ft .</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 and a half ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft 10 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft 11 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft 11 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft 4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft 6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft 6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft 6 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft 8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft 8 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 inch 11 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 inch 8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5.11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5.9 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5.9 m</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5;8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5f</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 1 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 1 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 11 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 14 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 2 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 3 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 3 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 3 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 3 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 3.2 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch .</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 5 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 5 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft and 4 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft and 6 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft four inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft . 4 inch .</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft . 5 inch .</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 1/2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 1/2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 1/2 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 2 ft ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 5 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 5 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 6 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 7 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft ft 0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft .</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft .1 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft .4 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 1 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 2 ft ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 2 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 2 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 2 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 2 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 2 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 3 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 6 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 7 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 9 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 inch 2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 inch 8 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6,3 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6,4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6,4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.2 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.4 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.4 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.5 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.8 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.9 ft to 7 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">60</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">64</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">68 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6ft1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6ft1 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6ft3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">7 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">7 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">7 ft 3 ft ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">73 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">75 inch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">7ft8 inch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">9 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">he is 6.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">my estimate is 6 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">yo butt!!!!!!!!</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
