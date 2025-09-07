@@ -100,6 +100,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;family=Roboto:ital,wght@0,100..900;1,100..900&amp;display=swap');
@@ -172,8 +174,9 @@ body {
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(measurements)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">conflicts_prefer</span>(dplyr<span class="sc">::</span>lag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">conflicts_prefer</span>(dplyr<span class="sc">::</span>lag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>[conflicted] Will prefer dplyr::lag over any other package.</code></pre>
 </div>
@@ -561,643 +564,2708 @@ $ your_name      &lt;chr&gt; "Joanna", "Forrest J. S. M.", "Kaitlyn", "adsf", "g
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>height_est_sample <span class="ot">&lt;-</span> height_est_sample <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(height_cols), <span class="sc">~</span> .x <span class="sc">|&gt;</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"'|-|(feet?|foot|ft|feeet|toot|fot|oot|feat)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" ft "</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(height_cols), <span class="sc">~</span> .x <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"'|-|,|(feet?|foot|ft|feeet|toot|fot|oot|feat)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" ft "</span>) <span class="sc">|&gt;</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"</span><span class="sc">\"</span><span class="st">|(inches?|inch|in|inces|invhes)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" inch "</span>) <span class="sc">|&gt;</span></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"(meters?|metres?)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" m "</span>) <span class="sc">|&gt;</span></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"(centimeters?|centimetres?|cent|cm)</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" cm "</span>) <span class="sc">|&gt;</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace_all</span>(<span class="st">"(?&lt;!c)m</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">" m "</span>)</span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: There was 1 warning in `mutate()`.
-ℹ In argument: `across(...)`.
-Caused by warning:
-! Using an external vector in selections was deprecated in tidyselect 1.1.0.
-ℹ Please use `all_of()` or `any_of()` instead.
-  # Was:
-  data %&gt;% select(height_cols)
-
-  # Now:
-  data %&gt;% select(all_of(height_cols))
-
-See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</code></pre>
-</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>height_est_sample <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(your_estimate) <span class="sc">|&gt;</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(your_estimate) <span class="sc">|&gt;</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>height_est_sample <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(your_estimate) <span class="sc">|&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">first_num =</span> <span class="fu">parse_number</span>(your_estimate),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">after_first =</span> <span class="fu">str_replace</span>(your_estimate, <span class="st">"^</span><span class="sc">\\</span><span class="st">d+"</span>, <span class="st">""</span>),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">second_num =</span> <span class="fu">parse_number</span>(after_first)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(first_num, second_num, your_estimate) <span class="sc">|&gt;</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(your_estimate, first_num) <span class="sc">|&gt;</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">|&gt;</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>() <span class="sc">|&gt;</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"100%"</span>, <span class="at">height =</span> <span class="st">"400px"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There were 2 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `first_num = parse_number(your_estimate)`.
+Caused by warning:
+! 1 parsing failure.
+row col expected          actual
+166  -- a number yo butt!!!!!!!!
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</code></pre>
+</div>
 <div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:100%; ">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th style="text-align: left;">your_estimate</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">your_estimate</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">first_num</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">1.5 m</td>
+<td style="text-align: right;">1.5</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1.8 m</td>
+<td style="text-align: right;">1.8</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">1.8 m</td>
+<td style="text-align: right;">1.8</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1.8 m</td>
+<td style="text-align: right;">1.8</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">1.9 m</td>
+<td style="text-align: right;">1.9</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1.93 m</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">175 cm</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">178 cm</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">180 cm</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">180 cm</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">180 cm</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">185 cm</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">186 cm</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">187</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">187 cm</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">193</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">193</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">193 m</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">193 cm</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">193 cm</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">196 cm</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">2 m</td>
+<td style="text-align: right;">1.9</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">2 m</td>
+<td style="text-align: right;">2.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2 m</td>
+<td style="text-align: right;">2.0</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">2 m</td>
+<td style="text-align: right;">2.0</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">2.4 m</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">2.5 m</td>
+<td style="text-align: right;">2.4</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">200</td>
+<td style="text-align: left;">2.5 m</td>
+<td style="text-align: right;">2.5</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">3.5 m</td>
+<td style="text-align: right;">3.5</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">4 ft 2</td>
+<td style="text-align: right;">4.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">5 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">5 ft 10 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5 ft 11 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">5 ft 5 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5 ft 8 inch</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">5 1/2 ft .</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5 and a half ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">5 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5 ft 10 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">5 ft 11 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5 ft 11 inch</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">5 ft 4</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">5 ft 5 inch</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;">5 ft 6</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">5 ft 6 ft</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">5 ft 6 inch</td>
+<td style="text-align: left;">5 ft 6 ft</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">5 ft 8</td>
+<td style="text-align: left;">5 ft 6 inch</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">5 ft 8 inch</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">5 inch 11 inch</td>
+<td style="text-align: left;">5 ft 8</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">5 ft 8 inch</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;">5 inch 8</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">5.11</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5.4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">5.7</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5.9 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">5.9 m</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">5;8</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">5 ft 10 inch</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft 10 inch</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft 11 inch</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 ft 11 inch</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft 11 inch</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 inch 11 inch</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 and a half ft</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">5f</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">6</td>
+<td style="text-align: left;">5.11</td>
+<td style="text-align: right;">5.1</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">6</td>
+<td style="text-align: left;">5.4</td>
+<td style="text-align: right;">5.4</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">6</td>
+<td style="text-align: left;">5.7</td>
+<td style="text-align: right;">5.7</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">6</td>
+<td style="text-align: left;">5.9 ft</td>
+<td style="text-align: right;">5.9</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">6</td>
+<td style="text-align: left;">5.9 m</td>
+<td style="text-align: right;">5.9</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">6</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 1 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 1 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 11 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 14 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 2 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 3 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 3 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 3 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 3 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 3.2 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4 inch .</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 5</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 5 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 5 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft and 4 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft and 6 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft four inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft . 4 inch .</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft . 5 inch .</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 1/2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 1/2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 1/2 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 2 ft ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 5 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 5 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 6 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 7 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft ft</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">6 ft ft 0</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft .</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft .1 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft .4 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">6 ft 0</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">6 ft 1</td>
+<td style="text-align: left;">6 ft .1 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">6 ft 1</td>
+<td style="text-align: left;">6 ft .4 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">6 ft 1 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">6 ft 1 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 1/2</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 1/2</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 1/2 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 1</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 1</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 1 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6ft1</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6ft1 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">6 ft 2</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">6 ft 2 ft ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 2</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 2 ft ft</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">6 ft 2 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 3</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 3</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 3 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 4 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 5</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 6 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 7</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 7 inch</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6 ft 8</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 ft 9 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">6 inch 2</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">6 inch 8 inch</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">6 m</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">6,3 ft</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">6,4</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">6,4</td>
+<td style="text-align: left;">6 ft 3</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">6.1</td>
+<td style="text-align: left;">6 ft 3</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">6.2</td>
+<td style="text-align: left;">6 ft 3 ft</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">6.2 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6.3</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6.3</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6.4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6.4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6.4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6.4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6.4 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6.4 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6.5</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6.5</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6.5</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6.5 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6.7</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6.8 ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6.9 ft to 7 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">60</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">64</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">68 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6ft1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">6ft1 inch</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">6ft3</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">7</td>
+<td style="text-align: left;">6 ft 3.2 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch .</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft and 4 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 5</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 5</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft and 6 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 6 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 6 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">my estimate is 6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 7 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 7</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 7 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 8</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 inch 8 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 9 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft 11 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft 14 inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft four inch</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft . 4 inch .</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft . 5 inch .</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 ft ft</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6 ft .</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 m</td>
+<td style="text-align: right;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.1</td>
+<td style="text-align: right;">6.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.2</td>
+<td style="text-align: right;">6.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.2 ft</td>
+<td style="text-align: right;">6.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">he is 6.2</td>
+<td style="text-align: right;">6.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.3</td>
+<td style="text-align: right;">6.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.3</td>
+<td style="text-align: right;">6.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.4</td>
+<td style="text-align: right;">6.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.4</td>
+<td style="text-align: right;">6.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.4</td>
+<td style="text-align: right;">6.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.4</td>
+<td style="text-align: right;">6.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.4 ft</td>
+<td style="text-align: right;">6.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.4 ft</td>
+<td style="text-align: right;">6.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.5</td>
+<td style="text-align: right;">6.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.5</td>
+<td style="text-align: right;">6.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.5</td>
+<td style="text-align: right;">6.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.5 ft</td>
+<td style="text-align: right;">6.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.7</td>
+<td style="text-align: right;">6.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6.8 ft</td>
+<td style="text-align: right;">6.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.9 ft to 7 ft</td>
+<td style="text-align: right;">6.9</td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;">7 ft 3 ft ft</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">7.5 ft</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">73 inch</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">75 inch</td>
+<td style="text-align: right;">7.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">7ft8 inch</td>
+<td style="text-align: right;">7.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">9 ft</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: right;">7.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">he is 6.2</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: right;">7.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">my estimate is 6 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: right;">7.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: right;">7.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: right;">7.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: right;">7.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5 ft</td>
+<td style="text-align: right;">7.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">9 ft</td>
+<td style="text-align: right;">9.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">60</td>
+<td style="text-align: right;">60.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">64</td>
+<td style="text-align: right;">64.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">68 inch</td>
+<td style="text-align: right;">68.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">73 inch</td>
+<td style="text-align: right;">73.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">75 inch</td>
+<td style="text-align: right;">75.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">175 cm</td>
+<td style="text-align: right;">175.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">178 cm</td>
+<td style="text-align: right;">178.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">180 cm</td>
+<td style="text-align: right;">180.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">180 cm</td>
+<td style="text-align: right;">180.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">180 cm</td>
+<td style="text-align: right;">180.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">185 cm</td>
+<td style="text-align: right;">185.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">186 cm</td>
+<td style="text-align: right;">186.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">187</td>
+<td style="text-align: right;">187.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">187 cm</td>
+<td style="text-align: right;">187.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">193</td>
+<td style="text-align: right;">193.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">193</td>
+<td style="text-align: right;">193.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">193 m</td>
+<td style="text-align: right;">193.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">193 cm</td>
+<td style="text-align: right;">193.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">193 cm</td>
+<td style="text-align: right;">193.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">196 cm</td>
+<td style="text-align: right;">196.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">200</td>
+<td style="text-align: right;">200.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">yo butt!!!!!!!!</td>
+<td style="text-align: right;">NA</td>
 </tr>
 </tbody>
 </table>
+</div>
+
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>height_est_sample_mod <span class="ot">&lt;-</span> height_est_sample <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">estimate_cm =</span> <span class="fu">case_when</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>     <span class="fu">is.na</span>(your_estimate) <span class="sc">|</span> <span class="fu">str_trim</span>(your_estimate) <span class="sc">==</span> <span class="st">""</span> <span class="sc">~</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>     <span class="sc">!</span><span class="fu">str_detect</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">d*"</span>) <span class="sc">~</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>     <span class="fu">str_detect</span>(your_estimate, <span class="st">"ft"</span>) <span class="sc">&amp;</span> <span class="fu">str_detect</span>(your_estimate, <span class="st">"inch"</span>) <span class="sc">~</span> {</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>       numbers <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">str_extract_all</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">d*"</span>)[[<span class="dv">1</span>]])</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>       <span class="cf">if</span> (<span class="fu">length</span>(numbers) <span class="sc">&gt;=</span> <span class="dv">2</span>) {</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>         <span class="fu">conv_unit</span>(numbers[<span class="dv">1</span>], <span class="st">"ft"</span>, <span class="st">"cm"</span>) <span class="sc">+</span> <span class="fu">conv_unit</span>(numbers[<span class="dv">2</span>], <span class="st">"inch"</span>, <span class="st">"cm"</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>       } <span class="cf">else</span> <span class="cn">NA_real_</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>     },</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>     <span class="fu">str_detect</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">bcm</span><span class="sc">\\</span><span class="st">b"</span>) <span class="sc">~</span> <span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">d*"</span>)),</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>     <span class="fu">str_detect</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">bm</span><span class="sc">\\</span><span class="st">b"</span>) <span class="sc">~</span> <span class="fu">conv_unit</span>(<span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">d*"</span>)), <span class="st">"m"</span>, <span class="st">"cm"</span>),</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>     <span class="fu">str_detect</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">bft</span><span class="sc">\\</span><span class="st">b"</span>) <span class="sc">~</span> <span class="fu">conv_unit</span>(<span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">d*"</span>)), <span class="st">"ft"</span>, <span class="st">"cm"</span>),</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>     <span class="fu">str_detect</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">binch</span><span class="sc">\\</span><span class="st">b"</span>) <span class="sc">~</span> <span class="fu">conv_unit</span>(<span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">d*"</span>)), <span class="st">"inch"</span>, <span class="st">"cm"</span>),</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>     <span class="cn">TRUE</span> <span class="sc">~</span> {</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>       num <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(your_estimate, <span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">d*"</span>))</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>       <span class="fu">case_when</span>(</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>         num <span class="sc">&lt;</span> <span class="dv">4</span> <span class="sc">~</span> <span class="fu">conv_unit</span>(num, <span class="st">"m"</span>, <span class="st">"cm"</span>),</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>         num <span class="sc">&gt;=</span> <span class="dv">4</span> <span class="sc">&amp;</span> num <span class="sc">&lt;</span> <span class="dv">20</span> <span class="sc">~</span> <span class="fu">conv_unit</span>(num, <span class="st">"ft"</span>, <span class="st">"cm"</span>),</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>         num <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> num <span class="sc">&lt;=</span> <span class="dv">120</span> <span class="sc">~</span> <span class="fu">conv_unit</span>(num, <span class="st">"inch"</span>, <span class="st">"cm"</span>),</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>         num <span class="sc">&gt;</span> <span class="dv">120</span> <span class="sc">&amp;</span> num <span class="sc">&lt;=</span> <span class="dv">250</span> <span class="sc">~</span> num,</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>         <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>       )</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>     }</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>   )</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a> ) <span class="sc">|&gt;</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(timestamp, your_name, estimate_cm, your_estimate, whats_too_low, whats_too_high, your_reasoning)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>height_est_sample_mod <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(estimate_cm) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">|&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>() <span class="sc">|&gt;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"100%"</span>, <span class="at">height =</span> <span class="st">"400px"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:100%; ">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">timestamp</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">your_name</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">estimate_cm</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">your_estimate</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">whats_too_low</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">whats_too_high</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">your_reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2014-09-26 10:56:00</td>
+<td style="text-align: left;">Mr. Brummond's Algebra I 7th Hour</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">5 inch 11 inch</td>
+<td style="text-align: left;">4 ft 6 inch</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: left;">We compared the guy to the fence, shrub; we also compared average height of a man. We used logic.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-09-07 09:39:06</td>
+<td style="text-align: left;">Luke H</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">5 inch 8</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Because compared to the fence which looks to be about 4feet he looks alot taller</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2014-08-15 07:23:12</td>
+<td style="text-align: left;">Adsf</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">6 inch 2</td>
+<td style="text-align: left;">5 inch 5</td>
+<td style="text-align: left;">7 inch 0</td>
+<td style="text-align: left;">He looks tall, shrubs are ususally 3 ft and he looks double that size</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-11-07 07:48:59</td>
+<td style="text-align: left;">Ms. Gerber's Class</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">6 inch 8 inch</td>
+<td style="text-align: left;">5 ft 8 inch</td>
+<td style="text-align: left;">7 inch</td>
+<td style="text-align: left;">He looked about a foot taller than my teacher who is 5'8"</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-08-18 07:23:33</td>
+<td style="text-align: left;">Hi</td>
+<td style="text-align: right;">122</td>
+<td style="text-align: left;">4 ft 2</td>
+<td style="text-align: left;">1 ft 2</td>
+<td style="text-align: left;">8 ft 2</td>
+<td style="text-align: left;">I loked at how big he is compared to other objectd</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-09-11 16:11:45</td>
+<td style="text-align: left;">Tanya</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: left;">1.5 m</td>
+<td style="text-align: left;">.55 m</td>
+<td style="text-align: left;">2 m</td>
+<td style="text-align: left;">He looks bigger than a metre stick</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018-01-18 12:13:26</td>
+<td style="text-align: left;">Carter Wilson</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">I'm 4 feet and he is taller.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-06-12 19:54:25</td>
+<td style="text-align: left;">Callah</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5 and a half ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Because the fence has to be at least 4 feet tall and he is taller than the fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-09-12 10:35:03</td>
+<td style="text-align: left;">Caitlyn</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5 ft 6</td>
+<td style="text-align: left;">3 ft 4</td>
+<td style="text-align: left;">9 ft 8</td>
+<td style="text-align: left;">I think this because because of the height of the bushes</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-08-26 13:05:55</td>
+<td style="text-align: left;">Jasmin</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">60</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">I tried to figure it out</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-09-29 08:40:50</td>
+<td style="text-align: left;">Jeff</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5 ft 8</td>
+<td style="text-align: left;">5 ft 2</td>
+<td style="text-align: left;">6 ft 7</td>
+<td style="text-align: left;">6'4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-02-14 06:52:48</td>
+<td style="text-align: left;">Ch</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5f</td>
+<td style="text-align: left;">1 cm</td>
+<td style="text-align: left;">1000 m</td>
+<td style="text-align: left;">With</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-01-06 16:14:30</td>
+<td style="text-align: left;">Maria Rivas</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5;8</td>
+<td style="text-align: left;">10 ft 9 ft 5 ft 3</td>
+<td style="text-align: left;">20 ft 18 ft 30 ft 100 ft</td>
+<td style="text-align: left;">Saili thinks that it is how his height is.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-05-08 08:05:00</td>
+<td style="text-align: left;">Brian</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">3 ft .</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">5ft because of the lenght</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-09-15 10:51:31</td>
+<td style="text-align: left;">Bill</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5 ft 4</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">I heard the answer the answer from someone else</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-08-22 13:54:56</td>
+<td style="text-align: left;">Malia</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5 1/2 ft .</td>
+<td style="text-align: left;">4 ft .</td>
+<td style="text-align: left;">10 ft .</td>
+<td style="text-align: left;">My dad is about that tall</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-09-08 11:07:56</td>
+<td style="text-align: left;">Camila</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: left;">5 ft 6 ft</td>
+<td style="text-align: left;">0 ft</td>
+<td style="text-align: left;">1000000000000000000000000000000000000000000000000000000000000000 ft</td>
+<td style="text-align: left;">I think that because the railing is about 4 ft and he is a few feet taler.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-05-21 14:10:37</td>
+<td style="text-align: left;">Ud</td>
+<td style="text-align: right;">156</td>
+<td style="text-align: left;">5.11</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">Fences are usually four feet</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-04-19 08:26:47</td>
+<td style="text-align: left;">Cassandra</td>
+<td style="text-align: right;">163</td>
+<td style="text-align: left;">64</td>
+<td style="text-align: left;">3 inch</td>
+<td style="text-align: left;">74 ft</td>
+<td style="text-align: left;">Nomal men range up to the sixes just so yeah</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-03-14 10:22:41</td>
+<td style="text-align: left;">Ndarri🤓 |</td>
+<td style="text-align: right;">165|</td>
+<td style="text-align: left;">.4 |</td>
+<td style="text-align: left;">|</td>
+<td style="text-align: left;">000 |</td>
+<td style="text-align: left;">judged by the house in the background |</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-09-07 05:56:21</td>
+<td style="text-align: left;">Liam Mchugh</td>
+<td style="text-align: right;">173</td>
+<td style="text-align: left;">68 inch</td>
+<td style="text-align: left;">23 inch</td>
+<td style="text-align: left;">100 inch</td>
+<td style="text-align: left;">Since im somewhere in the 50s he must be taller</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-05-03 07:55:54</td>
+<td style="text-align: left;">Gage Lawellin</td>
+<td style="text-align: right;">174</td>
+<td style="text-align: left;">5.7</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">He looks tall</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-05-15 23:22:26</td>
+<td style="text-align: left;">Nathan</td>
+<td style="text-align: right;">175</td>
+<td style="text-align: left;">175 cm</td>
+<td style="text-align: left;">130 cm</td>
+<td style="text-align: left;">220 cm</td>
+<td style="text-align: left;">I think the fence is 1m so he looks almost one and a half fences tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-10-17 11:57:35</td>
+<td style="text-align: left;">Doug</td>
+<td style="text-align: right;">178</td>
+<td style="text-align: left;">178 cm</td>
+<td style="text-align: left;">100 cm</td>
+<td style="text-align: left;">500 cm</td>
+<td style="text-align: left;">Looks average in height, used fence as a guide</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-09-06 08:30:40</td>
+<td style="text-align: left;">Grace Quach</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">5.9 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">6.5 ft</td>
+<td style="text-align: left;">Most male people stand at 5 ft but he seems relatively tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-09-07 20:57:16</td>
+<td style="text-align: left;">Brian</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">180 cm</td>
+<td style="text-align: left;">160 cm</td>
+<td style="text-align: left;">180 cm</td>
+<td style="text-align: left;">Bushes are usually 40 cm and he is</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-11-27 17:03:45</td>
+<td style="text-align: left;">Phil</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">1.8 m</td>
+<td style="text-align: left;">1.5 m</td>
+<td style="text-align: left;">2.1 m</td>
+<td style="text-align: left;">Typical male height</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-02-06 11:00:35</td>
+<td style="text-align: left;">David</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">1.8 m</td>
+<td style="text-align: left;">2.2 m</td>
+<td style="text-align: left;">1.5 m</td>
+<td style="text-align: left;">I assume that the fence is around 1m in height</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-02-02 19:09:47</td>
+<td style="text-align: left;">Bill</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">180 cm</td>
+<td style="text-align: left;">140 cm</td>
+<td style="text-align: left;">200 cm</td>
+<td style="text-align: left;">The fence must be about 100 cm and it looks like he would be about 1 and 8/10 of that</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-09-28 07:50:41</td>
+<td style="text-align: left;">Ms. Young</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">180 cm</td>
+<td style="text-align: left;">130 cm</td>
+<td style="text-align: left;">200 cm</td>
+<td style="text-align: left;">It's between 130 and 200</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-08-31 05:39:00</td>
+<td style="text-align: left;">Barbus</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">1.8 m</td>
+<td style="text-align: left;">1 m</td>
+<td style="text-align: left;">2.5 m</td>
+<td style="text-align: left;">The plant is about 85 centimeters.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-10-23 08:43:03</td>
+<td style="text-align: left;">Forrest J. S. M.</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">12 ft</td>
+<td style="text-align: left;">7 feet would be too tall but 5 feet would be too short so 6 feet should be the answer.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-09-28 11:19:59</td>
+<td style="text-align: left;">Gracey</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft ft 0</td>
+<td style="text-align: left;">5 ft ft 9</td>
+<td style="text-align: left;">6 ft ft 7</td>
+<td style="text-align: left;">He is taller than the fence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-09-16 13:32:37</td>
+<td style="text-align: left;">Terri Thomas</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 3</td>
+<td style="text-align: left;">2 ft 0</td>
+<td style="text-align: left;">7 ft 0</td>
+<td style="text-align: left;">He could be a little over 6'0.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-11-13 05:00:32</td>
+<td style="text-align: left;">Karen</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">3 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">Fence is probably 4 feet, he is about 2/6 or 1/3 taller than the fence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-11-09 11:35:15</td>
+<td style="text-align: left;">Francesca</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">Because he looked as tall as my dad and my is 6 foot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-08-24 15:40:51</td>
+<td style="text-align: left;">Vignesh</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">9 ft</td>
+<td style="text-align: left;">No reasoning</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-10-02 11:00:48</td>
+<td style="text-align: left;">Abel</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">The fasd esn 4ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2014-08-18 05:41:15</td>
+<td style="text-align: left;">Monty</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">I used the height of the fence to help</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-10-03 08:48:27</td>
+<td style="text-align: left;">Daniel Vogt</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">Looks really tall considering the fence and angle</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-10-17 11:58:03</td>
+<td style="text-align: left;">Gabighd</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">I noticed</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-08-03 07:31:00</td>
+<td style="text-align: left;">Mrs. Triolo's Class</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 5</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">I compared him to the gate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-09-12 06:11:00</td>
+<td style="text-align: left;">Luci</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">3 1/2 ft</td>
+<td style="text-align: left;">9 ft</td>
+<td style="text-align: left;">I used the fence as a guide</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-05-23 14:00:12</td>
+<td style="text-align: left;">Trenton</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">I think because he looks so tall</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-03-03 12:12:11</td>
+<td style="text-align: left;">Allison</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">I guessed</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-10-16 08:57:40</td>
+<td style="text-align: left;">Jarrett</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 2</td>
+<td style="text-align: left;">4 ft 0</td>
+<td style="text-align: left;">7 ft 0</td>
+<td style="text-align: left;">I seen that the gate looked like 3 feet so it looked like he was double that hight</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-09-28 11:00:59</td>
+<td style="text-align: left;">Cole</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 0</td>
+<td style="text-align: left;">5 ft 0</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">I made a ballpark</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-11-01 04:05:30</td>
+<td style="text-align: left;">Don't Have One</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">The fence is about three feet tall and mr.standel is about twice the size</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-10-17 16:16:31</td>
+<td style="text-align: left;">Lisa Ann Fales-Iliff</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft ft</td>
+<td style="text-align: left;">5 ft ft 1</td>
+<td style="text-align: left;">10 ft ft</td>
+<td style="text-align: left;">I guessed</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-08-24 11:01:25</td>
+<td style="text-align: left;">5th</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">Fdh</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-01-04 07:19:22</td>
+<td style="text-align: left;">Delaney</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 1/2 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">3 foot bush</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-04-09 00:12:39</td>
+<td style="text-align: left;">Jenelle</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 3 ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Moast mens means are at a range between 5 and 6 feet so i used my priorr knolage to make a range</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-03-14 06:56:19</td>
+<td style="text-align: left;">Cody</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">100000</td>
+<td style="text-align: left;">Crazy gusse</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-10-31 04:12:05</td>
+<td style="text-align: left;">Y4jm</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">Taller than the fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-04-21 11:18:42</td>
+<td style="text-align: left;">Kevin</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-01-09 07:36:35</td>
+<td style="text-align: left;">Elias Homeroom</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">I know he's taller than 4 feet, but shorter than 10 feet</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-11-21 07:59:55</td>
+<td style="text-align: left;">Nia And April</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 1</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7+ ft</td>
+<td style="text-align: left;">We used the average size of a fence and the bush</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-09-06 10:43:45</td>
+<td style="text-align: left;">Collin Merkel</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 2 ft ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">The suit is lanky and tight, the fence and bush are much shorter than he is.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-05-01 10:29:39</td>
+<td style="text-align: left;">Claire</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 3</td>
+<td style="text-align: left;">5 ft 5</td>
+<td style="text-align: left;">7 ft 2</td>
+<td style="text-align: left;">He looks to be about 6 feet tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-10-14 10:49:47</td>
+<td style="text-align: left;">Brilee</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 1/2</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">78 ft</td>
+<td style="text-align: left;">He looks like he is that tall</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-09-28 11:13:57</td>
+<td style="text-align: left;">Cole</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">5 ft 6</td>
+<td style="text-align: left;">6 ft 7</td>
+<td style="text-align: left;">I saw the answer</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-08-09 19:27:57</td>
+<td style="text-align: left;">Lisa</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">Fence about 4 feet elbow to shoulder 1 ft and shoulder to head 1 ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-05-03 13:53:38</td>
+<td style="text-align: left;">Taniyah</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: left;">He is way taller than the gate</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-03-11 05:09:00</td>
+<td style="text-align: left;">Jj</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Taller than the fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-12-11 06:53:00</td>
+<td style="text-align: left;">Micah Mathias</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 1/2</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">My mom is about 6 ft and he is a little taller than her</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-02-07 10:47:46</td>
+<td style="text-align: left;">Adrian22</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 7</td>
+<td style="text-align: left;">3 ft</td>
+<td style="text-align: left;">82 ft</td>
+<td style="text-align: left;">My estimation is 6'7 because i combined the fenceand the bush</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-08-26 13:19:18</td>
+<td style="text-align: left;">Ale</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">4 ft 6</td>
+<td style="text-align: left;">8 ft 0</td>
+<td style="text-align: left;">He looks taller than 5'0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-04-21 13:03:23</td>
+<td style="text-align: left;">Ashley</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 2 ft ft</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">900 ft ft</td>
+<td style="text-align: left;">He seems really tall compared to the fence behind him.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-01-19 09:00:33</td>
+<td style="text-align: left;">Sammuel</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6ft1</td>
+<td style="text-align: left;">5 inch</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">He looks that tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-02-13 11:42:53</td>
+<td style="text-align: left;">Hannah</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">He is taller than the fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2014-12-01 10:42:31</td>
+<td style="text-align: left;">Ryan</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">I did good</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-01-23 08:26:49</td>
+<td style="text-align: left;">George</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Using other peoples heights to estimate and looking at the items around mr. S</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-04-13 12:05:04</td>
+<td style="text-align: left;">Salt Bae</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 2</td>
+<td style="text-align: left;">2 ft 2</td>
+<td style="text-align: left;">8 ft 10</td>
+<td style="text-align: left;">He is tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-08-21 11:44:18</td>
+<td style="text-align: left;">Owen</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">5 ft 10</td>
+<td style="text-align: left;">6 ft 10</td>
+<td style="text-align: left;">Based on the height of the fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018-05-16 09:26:18</td>
+<td style="text-align: left;">Name</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 8</td>
+<td style="text-align: left;">2.1</td>
+<td style="text-align: left;">7 ft 8</td>
+<td style="text-align: left;">I guessed</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-09-09 05:33:53</td>
+<td style="text-align: left;">Syd</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">4 ft 11</td>
+<td style="text-align: left;">8 ft 11</td>
+<td style="text-align: left;">Hes twice the height of bush</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-08-12 11:06:38</td>
+<td style="text-align: left;">Nichole</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">The fence is about 4 feet, if you doubled the fence it would be a lot taller than he is, so he is probably about 6 feet tall.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-10-12 09:18:12</td>
+<td style="text-align: left;">Dan</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 1</td>
+<td style="text-align: left;">5 ft 0</td>
+<td style="text-align: left;">7 ft 0</td>
+<td style="text-align: left;">His head is fairly large and large heads usually equal larger bodies.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2014-12-11 16:10:21</td>
+<td style="text-align: left;">Math</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">Fence, bush</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2014-11-24 05:20:19</td>
+<td style="text-align: left;">W</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6ft3</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">W</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-04-15 10:43:35</td>
+<td style="text-align: left;">Vedha</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft .</td>
+<td style="text-align: left;">2 ft .</td>
+<td style="text-align: left;">1234 ft .</td>
+<td style="text-align: left;">I noticed that he looks abou 6.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-10-27 08:42:22</td>
+<td style="text-align: left;">Eli</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">1 of our subs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-08-25 10:56:02</td>
+<td style="text-align: left;">Pancho</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">5 ft 9</td>
+<td style="text-align: left;">6 ft 3</td>
+<td style="text-align: left;">Because he looks tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-06-07 17:03:38</td>
+<td style="text-align: left;">Andrew</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">2 inch</td>
+<td style="text-align: left;">24 ft</td>
+<td style="text-align: left;">He is a little taller than my dad</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-10-19 11:07:26</td>
+<td style="text-align: left;">B</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">3 ft</td>
+<td style="text-align: left;">9 ft</td>
+<td style="text-align: left;">Taller than the fence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2014-09-04 05:27:18</td>
+<td style="text-align: left;">Don</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">3 inch</td>
+<td style="text-align: left;">9 ft</td>
+<td style="text-align: left;">He is taller than the gate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-10-06 13:01:21</td>
+<td style="text-align: left;">Syrah</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Most men are about 6ft but he looks pretty tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-09-15 07:13:15</td>
+<td style="text-align: left;">Evan</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 5</td>
+<td style="text-align: left;">2 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">My dad is 6 ft so he looks a little taller</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-04-27 14:49:28</td>
+<td style="text-align: left;">Iris</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">I guessed</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-11-07 11:56:48</td>
+<td style="text-align: left;">Logan</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">6 ft 4</td>
+<td style="text-align: left;">6 ft 0 ft</td>
+<td style="text-align: left;">7 ft 0 ft</td>
+<td style="text-align: left;">Because if you click answer you can see his height</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-01-29 09:36:08</td>
+<td style="text-align: left;">Olivia</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: left;">my estimate is 6 ft</td>
+<td style="text-align: left;">way to low is 1 ft</td>
+<td style="text-align: left;">way to high is 100 ft</td>
+<td style="text-align: left;">Commen</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-02-07 10:28:08</td>
+<td style="text-align: left;">Mlle Fahim's Class</td>
+<td style="text-align: right;">185</td>
+<td style="text-align: left;">185 cm</td>
+<td style="text-align: left;">130 cm</td>
+<td style="text-align: left;">200 cm</td>
+<td style="text-align: left;">Compared to our teacher who is 160cm, he seems about 25cms taller.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018-03-05 08:19:41</td>
+<td style="text-align: left;">Karen</td>
+<td style="text-align: right;">185</td>
+<td style="text-align: left;">73 inch</td>
+<td style="text-align: left;">60 inch</td>
+<td style="text-align: left;">75 inch</td>
+<td style="text-align: left;">Compared to the fence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-09-09 11:07:23</td>
+<td style="text-align: left;">Francisco Pacheco</td>
+<td style="text-align: right;">186</td>
+<td style="text-align: left;">6.1</td>
+<td style="text-align: left;">2.1</td>
+<td style="text-align: left;">7.3</td>
+<td style="text-align: left;">Most men are hight 6.0 to 7.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-02-04 22:34:22</td>
+<td style="text-align: left;">Fred</td>
+<td style="text-align: right;">186</td>
+<td style="text-align: left;">186 cm</td>
+<td style="text-align: left;">140 cm</td>
+<td style="text-align: left;">220 cm</td>
+<td style="text-align: left;">Pool gate is high, you can see he is a tall man</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-05-17 01:25:55</td>
+<td style="text-align: left;">Ted</td>
+<td style="text-align: right;">187</td>
+<td style="text-align: left;">187</td>
+<td style="text-align: left;">160</td>
+<td style="text-align: left;">200</td>
+<td style="text-align: left;">Looks tall</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-10-10 07:31:51</td>
+<td style="text-align: left;">Grade 5/6</td>
+<td style="text-align: right;">187</td>
+<td style="text-align: left;">187 cm</td>
+<td style="text-align: left;">100 cm</td>
+<td style="text-align: left;">200 cm</td>
+<td style="text-align: left;">We think the fence is about 100cm, and he's not double the height of the fence.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-05-26 09:11:02</td>
+<td style="text-align: left;">Stephanie Rios</td>
+<td style="text-align: right;">189</td>
+<td style="text-align: left;">he is 6.2</td>
+<td style="text-align: left;">it is too low to be 4.5</td>
+<td style="text-align: left;">it is too high to be 6.8</td>
+<td style="text-align: left;">My estimate is that he is 6.3 because he is taller than a fence and looks tall</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-11-14 12:10:34</td>
+<td style="text-align: left;">Cuka Munga</td>
+<td style="text-align: right;">189</td>
+<td style="text-align: left;">6.2</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9e+41</td>
+<td style="text-align: left;">Because i am depressed</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-12-07 08:01:19</td>
+<td style="text-align: left;">Ssc</td>
+<td style="text-align: right;">189</td>
+<td style="text-align: left;">6.2 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">The fence in the background is about a meter high which is about 3 feet. If you double the fence it will be about the same height as mr. Stadel. So i think his height is about 2 meters or 6.2 feet.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018-01-29 16:11:23</td>
+<td style="text-align: left;">Dan</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: left;">1.9 m</td>
+<td style="text-align: left;">1.5 m</td>
+<td style="text-align: left;">2.5 m</td>
+<td style="text-align: left;">The height of the fence is about 1 m. and he is not quite twice as high ast the fence.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-05-22 05:11:13</td>
+<td style="text-align: left;">Matt</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: left;">75 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">He looks almost twice the height of what i'm estimating to be a 4 foot fence.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018-01-26 11:12:54</td>
+<td style="text-align: left;">Danielle</td>
+<td style="text-align: right;">192</td>
+<td style="text-align: left;">6.3</td>
+<td style="text-align: left;">4.3 ft</td>
+<td style="text-align: left;">8.9 ft</td>
+<td style="text-align: left;">My dad is 6.3 feet and that man looks as tall as my dad</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-12-10 12:39:34</td>
+<td style="text-align: left;">Luna</td>
+<td style="text-align: right;">192</td>
+<td style="text-align: left;">6.3</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">100</td>
+<td style="text-align: left;">I guessed</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-11-14 10:49:34</td>
+<td style="text-align: left;">John Cena</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: left;">1.93 m</td>
+<td style="text-align: left;">1 cm</td>
+<td style="text-align: left;">10 m</td>
+<td style="text-align: left;">He is a grown man</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-03-06 20:22:46</td>
+<td style="text-align: left;">Harry</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: left;">193 cm</td>
+<td style="text-align: left;">140 cm</td>
+<td style="text-align: left;">220 cm</td>
+<td style="text-align: left;">When i guessed the fence was about one meter and he is a little shorter than 2 meters</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018-01-16 11:10:18</td>
+<td style="text-align: left;">Dominic</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: left;">193</td>
+<td style="text-align: left;">3 cm</td>
+<td style="text-align: left;">3meteres</td>
+<td style="text-align: left;">Jgjgdhb</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-10-16 08:58:00</td>
+<td style="text-align: left;">Tykeira</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: left;">193 cm</td>
+<td style="text-align: left;">1 m</td>
+<td style="text-align: left;">2 m</td>
+<td style="text-align: left;">He looks taller then me</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-09-08 09:38:58</td>
+<td style="text-align: left;">Dw</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: left;">193</td>
+<td style="text-align: left;">170</td>
+<td style="text-align: left;">210</td>
+<td style="text-align: left;">Mr white is 190 cm and this guy looks taller</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-02-09 07:26:52</td>
+<td style="text-align: left;">Cody</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: left;">6.4</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">He's twice the size of the fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-10-07 10:48:03</td>
+<td style="text-align: left;">Skye Neve</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: left;">6.4 ft</td>
+<td style="text-align: left;">1 cm</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">Well i gussed</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-01-13 14:50:11</td>
+<td style="text-align: left;">Hi</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: left;">6.4</td>
+<td style="text-align: left;">3 ft</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">Using my finger.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018-04-19 21:53:13</td>
+<td style="text-align: left;">Ethan</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: left;">6.4</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-12-11 13:06:51</td>
+<td style="text-align: left;">Sienna</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: left;">6.4 ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">He looks like like my dad</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-04-10 06:40:24</td>
+<td style="text-align: left;">Cristian</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: left;">6.4</td>
+<td style="text-align: left;">legs</td>
+<td style="text-align: left;">chest</td>
+<td style="text-align: left;">Dumb</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-11-30 16:43:21</td>
+<td style="text-align: left;">Joanna</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: left;">5 inch</td>
+<td style="text-align: left;">7 inch</td>
+<td style="text-align: left;">6' 4"</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-08-09 15:39:47</td>
+<td style="text-align: left;">Kaitlyn</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Most people are more then 5 feet tall.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-03-18 20:51:49</td>
+<td style="text-align: left;">Ws</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">5 inch</td>
+<td style="text-align: left;">7 inch</td>
+<td style="text-align: left;">Fence is approximately 4 1/2 feet high</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2014-12-09 08:56:22</td>
+<td style="text-align: left;">Jack Kostecki</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6ft1 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">Normal adults are from 5ft to 6ft something and i thought he was a bit taller than 5ft 11 inches</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-07-08 07:33:10</td>
+<td style="text-align: left;">Chris</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: left;">2 inch</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">The fence in the background is typically 3 feet high</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-10-16 08:08:03</td>
+<td style="text-align: left;">Cadan</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">3 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">I gussed my uncle.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2014-10-06 20:32:18</td>
+<td style="text-align: left;">Jason</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 9 inch</td>
+<td style="text-align: left;">5 ft 10 inch</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">The fence is about 4 feet high. Mr. Stadel is a little less than 3/4 again as tall as the fence.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-03-19 13:14:12</td>
+<td style="text-align: left;">Emartin</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">8 ft 9 inch</td>
+<td style="text-align: left;">The fence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-11-16 11:45:03</td>
+<td style="text-align: left;">Demajay</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">Grown man</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-03-21 08:28:17</td>
+<td style="text-align: left;">Kristine</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 1 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">Because he wouldn't be 4 feet and if he was, then he would be the same height as the gate. So he is a bit higher than the gate.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-09-09 05:28:26</td>
+<td style="text-align: left;">Class 4/5</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 7 inch</td>
+<td style="text-align: left;">5 ft 11 inch</td>
+<td style="text-align: left;">9 inch 10 inch</td>
+<td style="text-align: left;">We decided as a class</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-11-17 11:04:04</td>
+<td style="text-align: left;">Jenni</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">The fence is probably 3 1/2 feet and he is about 3 feet taller than the fence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-10-23 10:03:42</td>
+<td style="text-align: left;">Mrs. Spink's A.m. Class</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 6 inch</td>
+<td style="text-align: left;">5 ft 4 inch</td>
+<td style="text-align: left;">7 ft 4 inch</td>
+<td style="text-align: left;">We guess that the fence is about 4' and he makes it look small.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-03-18 14:20:34</td>
+<td style="text-align: left;">Alisa</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Men are generally around 5 ft 7 in to 6ft 5in. He looks pretty tall.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-08-28 10:18:40</td>
+<td style="text-align: left;">A</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 11 inch</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">S</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-11-04 13:20:20</td>
+<td style="text-align: left;">Fred</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">5 ft 3 inch</td>
+<td style="text-align: left;">7 ft 4 inch</td>
+<td style="text-align: left;">We saw his wifes height.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-06-19 07:08:43</td>
+<td style="text-align: left;">Susan</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">It looks like he is standing in front of a 5 feet fence which appears smaller due to perspective.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-08-26 08:00:47</td>
+<td style="text-align: left;">Jamie</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">I know my son is 6'2 and he looks taller than him</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-09-11 19:00:53</td>
+<td style="text-align: left;">Jill</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">I think the fence is 4 feet and estimated at least 2 more feet above the gate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-08-22 08:44:20</td>
+<td style="text-align: left;">Hayden</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft and 4 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Because hes smaller than schack</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-01-20 12:58:40</td>
+<td style="text-align: left;">Sherlyn</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft .4 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">He look a little to high than 5ft</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-09-15 13:31:54</td>
+<td style="text-align: left;">Winkler232</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">7ft8 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">Between 6ft 8ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-09-14 09:28:28</td>
+<td style="text-align: left;">Olivia</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">4 ft 5 inch</td>
+<td style="text-align: left;">8 ft 5 inch</td>
+<td style="text-align: left;">He looks it</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2014-10-01 10:58:51</td>
+<td style="text-align: left;">Creston</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">5 ft 11 inch</td>
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Compared to fence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-10-17 15:06:52</td>
+<td style="text-align: left;">Room 36</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">The fence is about 4 feet, he looks a couple feet taller</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-10-13 05:54:56</td>
+<td style="text-align: left;">Ms.e</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft . 5 inch .</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">My husband is 6"1" and this man looks roughly 4 inches taller</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-10-27 08:26:30</td>
+<td style="text-align: left;">Mike</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 1 inch</td>
+<td style="text-align: left;">5 ft 3 inch</td>
+<td style="text-align: left;">7 ft 10 inch</td>
+<td style="text-align: left;">The fence is about four feet most likely so he is around six foot something</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-09-11 07:39:50</td>
+<td style="text-align: left;">Tj Briggs</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">5 ft 5 inch</td>
+<td style="text-align: left;">2 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">The average height for a white male is 5'10" and he looks shorter than normal</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-11-19 07:20:00</td>
+<td style="text-align: left;">Molly Pfeffer</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">100 ft</td>
+<td style="text-align: left;">He looks like the same height as kris bryant and he is 6 ft 5 in</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-12-05 07:58:23</td>
+<td style="text-align: left;">Jessica C</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Because he looks 6 foot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-02-22 16:31:16</td>
+<td style="text-align: left;">Gustav</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">I estimated based on where he was on the fence.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2014-10-15 06:43:44</td>
+<td style="text-align: left;">Lluvia</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">5 ft 8 inch</td>
+<td style="text-align: left;">4 ft 9 inch</td>
+<td style="text-align: left;">6 ft 10 inch</td>
+<td style="text-align: left;">The fence should be about 4 feet so i tried adding on feet from the there.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-11-04 09:39:28</td>
+<td style="text-align: left;">Seth</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">He is taller than the 3 foot fence.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-12-12 11:05:17</td>
+<td style="text-align: left;">Heather</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">5 ft 11 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">He looks tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-06-12 11:13:57</td>
+<td style="text-align: left;">Val</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 1 inch</td>
+<td style="text-align: left;">5 ft 5 inch</td>
+<td style="text-align: left;">6 ft 8 inch</td>
+<td style="text-align: left;">The fence is probably around 3.5 feet tall and mr. Stadel is about 6 feet from the fence.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-11-21 08:52:57</td>
+<td style="text-align: left;">Reeeen</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 6 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">He looks like an averagely sized man maybe taller</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2014-09-07 17:00:54</td>
+<td style="text-align: left;">Meg</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch .</td>
+<td style="text-align: left;">3 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">He looks taller than average</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-04-26 06:25:27</td>
+<td style="text-align: left;">Mary</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: left;">2 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">The fence is probably 3' so i doubled and added 2 "</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-08-10 09:35:01</td>
+<td style="text-align: left;">Odom's Unicorns</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">The fence and plant height. Typical fence is 4 ft high.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-01-13 09:59:01</td>
+<td style="text-align: left;">Morgan</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft .1 inch</td>
+<td style="text-align: left;">5 ft .9 inch</td>
+<td style="text-align: left;">7 ft .0 inch</td>
+<td style="text-align: left;">Because that would be the average height for the picture</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-08-26 13:02:42</td>
+<td style="text-align: left;">Rosendo Medina</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 4 inch</td>
+<td style="text-align: left;">2 ft 10 inch</td>
+<td style="text-align: left;">10 ft 11 inch</td>
+<td style="text-align: left;">He is higher than the fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-10-02 07:50:22</td>
+<td style="text-align: left;">Curran Crew</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">We used the fence and the bush to compare his height.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-01-27 11:55:47</td>
+<td style="text-align: left;">Bca</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">5 ft 8 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">I noticed the bush and railing</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-05-20 07:03:42</td>
+<td style="text-align: left;">Ali-Ali-Ondra</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft . 4 inch .</td>
+<td style="text-align: left;">4 ft .</td>
+<td style="text-align: left;">7 ft .</td>
+<td style="text-align: left;">Way taller than me and i look at the measuring tape everyday in my awesome math class.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-09-01 17:59:31</td>
+<td style="text-align: left;">Meg</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Shrub is probably three feet</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-08-29 11:34:42</td>
+<td style="text-align: left;">Mr. G's 4th Period Class</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 3.2 inch</td>
+<td style="text-align: left;">5 ft 5 inch</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">We used the items around him</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-05-08 06:24:59</td>
+<td style="text-align: left;">Walter Zadow Grade 1/2</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">5 ft 10 inch</td>
+<td style="text-align: left;">1 ft 2 inch</td>
+<td style="text-align: left;">9 ft 11 inch</td>
+<td style="text-align: left;">Because he is taller then mr. Hartwig</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-10-26 10:04:02</td>
+<td style="text-align: left;">What</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 7 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">Becuse he is about 3 feet taller than the fence and the fence is about 4 feet</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-04-26 06:25:04</td>
+<td style="text-align: left;">Mary</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: left;">2 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">The fence is probably 3' so i doubled and added 2 "</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-04-08 11:06:28</td>
+<td style="text-align: left;">Maddy, Kade, Charli</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 14 inch</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">a mile</td>
+<td style="text-align: left;">4 feet is too low because my friend landen is 4 feet tall and he is in second grade. A mile is too long because i think a mile is 148 paces. A man is bigger then a kid so i thought 3 more feet bigger.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-03-14 07:25:13</td>
+<td style="text-align: left;">Shawntavia</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">5 ft 6 inch</td>
+<td style="text-align: left;">5 ft 4 inch</td>
+<td style="text-align: left;">6 ft 5 inch</td>
+<td style="text-align: left;">Same height as my father.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-09-10 13:04:03</td>
+<td style="text-align: left;">Mike</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">5 ft 10 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Compared to the bush and fence, he seems to be a man of average height</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-03-16 10:09:19</td>
+<td style="text-align: left;">102</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft four inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">6 ft seven inch</td>
+<td style="text-align: left;">Because it is in the middle of our estimates</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-08-27 13:22:07</td>
+<td style="text-align: left;">Justin</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 2 inch</td>
+<td style="text-align: left;">2 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">We think the fence is about</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2014-07-09 05:20:54</td>
+<td style="text-align: left;">Mark</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">5 ft 11 inch</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Fence is probably 4 ft. he looks average.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-11-15 11:45:20</td>
+<td style="text-align: left;">Eagle 2</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft and 6 inch</td>
+<td style="text-align: left;">7 inch</td>
+<td style="text-align: left;">18 m</td>
+<td style="text-align: left;">We used the bush and our fingers to measure the man. We knew the gate coudn't be 5 meters tall. We remembered that bushes are about 3 feet tall. So we measured with our fingers</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-11-07 15:40:31</td>
+<td style="text-align: left;">Kyle</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">6 ft 3 inch</td>
+<td style="text-align: left;">3 ft</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">Fence regular 48 in</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-11-09 12:52:10</td>
+<td style="text-align: left;">Moe</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: left;">196 cm</td>
+<td style="text-align: left;">1 cm</td>
+<td style="text-align: left;">60 m</td>
+<td style="text-align: left;">The gate</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-04-06 18:13:25</td>
+<td style="text-align: left;">Roth</td>
+<td style="text-align: right;">198</td>
+<td style="text-align: left;">6.5</td>
+<td style="text-align: left;">6.1</td>
+<td style="text-align: left;">6.8</td>
+<td style="text-align: left;">He's tall and slim</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-09-08 06:57:03</td>
+<td style="text-align: left;">Gustavo</td>
+<td style="text-align: right;">198</td>
+<td style="text-align: left;">6.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">He looks prety tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-10-20 18:13:43</td>
+<td style="text-align: left;">Tom</td>
+<td style="text-align: right;">198</td>
+<td style="text-align: left;">6.5</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">The fence is a standard 4' high</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-03-30 07:51:02</td>
+<td style="text-align: left;">Ellie</td>
+<td style="text-align: right;">198</td>
+<td style="text-align: left;">6.5 ft</td>
+<td style="text-align: left;">4 ft</td>
+<td style="text-align: left;">6 ft</td>
+<td style="text-align: left;">The fence looks like 4 ft</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-10-13 05:36:02</td>
+<td style="text-align: left;">Carole</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: left;">200</td>
+<td style="text-align: left;">50</td>
+<td style="text-align: left;">500</td>
+<td style="text-align: left;">175</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-01-23 09:52:49</td>
+<td style="text-align: left;">Mark</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: left;">2 m</td>
+<td style="text-align: left;">1 m</td>
+<td style="text-align: left;">1 k m</td>
+<td style="text-align: left;">More than a meter</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-04-26 06:41:56</td>
+<td style="text-align: left;">Class</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: left;">2 m</td>
+<td style="text-align: left;">1 m</td>
+<td style="text-align: left;">3 m</td>
+<td style="text-align: left;">Fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-05-02 11:01:12</td>
+<td style="text-align: left;">Erran</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: left;">2 m</td>
+<td style="text-align: left;">6 cm</td>
+<td style="text-align: left;">10000 m</td>
+<td style="text-align: left;">If i am one meter, why would he be the same? He must be taller.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-09-19 05:45:19</td>
+<td style="text-align: left;">Bryan Austin</td>
+<td style="text-align: right;">204</td>
+<td style="text-align: left;">6.7</td>
+<td style="text-align: left;">5.11</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">He is not 7 feet and not 5.11 feet so it is reasonable to say that he is in beetween</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018-04-30 19:39:27</td>
+<td style="text-align: left;">Valeria</td>
+<td style="text-align: right;">207</td>
+<td style="text-align: left;">6.8 ft</td>
+<td style="text-align: left;">3 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">I guessed i’m it because he seemed like he is an average height</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-05-28 09:00:03</td>
+<td style="text-align: left;">Jahan Minhas Jaje Pauler</td>
+<td style="text-align: right;">210</td>
+<td style="text-align: left;">6.9 ft to 7 ft</td>
+<td style="text-align: left;">1 m</td>
+<td style="text-align: left;">10 m</td>
+<td style="text-align: left;">A fence is usually 5to6ft and hes 2 times higer</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2014-11-14 07:27:01</td>
+<td style="text-align: left;">Joan</td>
+<td style="text-align: right;">213</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">3 ft</td>
+<td style="text-align: left;">9 ft</td>
+<td style="text-align: left;">Taller than fence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-10-25 08:58:54</td>
+<td style="text-align: left;">Skyler</td>
+<td style="text-align: right;">213</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">I think the gate is close to five feet tall.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-02-06 15:11:06</td>
+<td style="text-align: left;">Susanna</td>
+<td style="text-align: right;">213</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">4 ft .</td>
+<td style="text-align: left;">100 ft .</td>
+<td style="text-align: left;">I think that because the bush is about 3 feet and another bush is 3 feet so that is 6 feet then i added 1 more foot to get 7 feet</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2014-10-24 06:03:56</td>
+<td style="text-align: left;">Kiki</td>
+<td style="text-align: right;">213</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">I looked at the gate then i looked at him</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-11-02 08:43:17</td>
+<td style="text-align: left;">Mrs. Ludwig's Class</td>
+<td style="text-align: right;">213</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">1 ft</td>
+<td style="text-align: left;">100 ft</td>
+<td style="text-align: left;">He is a lot taller than the fence which we estimate is around 4 or 5 feet.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016-02-12 10:56:58</td>
+<td style="text-align: left;">Jessica</td>
+<td style="text-align: right;">213</td>
+<td style="text-align: left;">7 ft 3 ft ft</td>
+<td style="text-align: left;">5 ft 5 ft ft</td>
+<td style="text-align: left;">8 ft 6 ft ft</td>
+<td style="text-align: left;">I was close just by9''</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2016-09-07 05:30:38</td>
+<td style="text-align: left;">Ms.cox's Class</td>
+<td style="text-align: right;">213</td>
+<td style="text-align: left;">7 ft</td>
+<td style="text-align: left;">1 inch</td>
+<td style="text-align: left;">12 ft</td>
+<td style="text-align: left;">He looks like he is as tall as a basketball player</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-09-09 08:52:44</td>
+<td style="text-align: left;">Sean</td>
+<td style="text-align: right;">229</td>
+<td style="text-align: left;">7.5 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">8 ft</td>
+<td style="text-align: left;">I was thinking that the bush was three feet</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-09-10 14:31:12</td>
+<td style="text-align: left;">Mr. S</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: left;">2.4 m</td>
+<td style="text-align: left;">1 m</td>
+<td style="text-align: left;">3 m</td>
+<td style="text-align: left;">Dunno</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018-02-06 05:33:05</td>
+<td style="text-align: left;">Mb</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: left;">2.5 m</td>
+<td style="text-align: left;">1 m</td>
+<td style="text-align: left;">3 m</td>
+<td style="text-align: left;">Fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-06-13 11:49:39</td>
+<td style="text-align: left;">Hailey</td>
+<td style="text-align: right;">274</td>
+<td style="text-align: left;">9 ft</td>
+<td style="text-align: left;">5 ft</td>
+<td style="text-align: left;">10 ft</td>
+<td style="text-align: left;">He is 9 fet tall because big feet and higher than a gate</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-09-08 07:55:01</td>
+<td style="text-align: left;">Vreman</td>
+<td style="text-align: right;">350</td>
+<td style="text-align: left;">3.5 m</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">10000</td>
+<td style="text-align: left;">Fence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018-04-03 10:25:15</td>
+<td style="text-align: left;">Omae Wa Mou Shindeiru</td>
+<td style="text-align: right;">590</td>
+<td style="text-align: left;">5.9 m</td>
+<td style="text-align: left;">3 m</td>
+<td style="text-align: left;">8 m</td>
+<td style="text-align: left;">He looks that tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017-02-23 07:46:08</td>
+<td style="text-align: left;">Sps5h.p</td>
+<td style="text-align: right;">600</td>
+<td style="text-align: left;">6 m</td>
+<td style="text-align: left;">1.68 m</td>
+<td style="text-align: left;">25 m</td>
+<td style="text-align: left;">He looks really tall</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017-10-02 11:11:23</td>
+<td style="text-align: left;">A.b.</td>
+<td style="text-align: right;">19300</td>
+<td style="text-align: left;">193 m</td>
+<td style="text-align: left;">0 m</td>
+<td style="text-align: left;">88888 ft</td>
+<td style="text-align: left;">He is two fenses tall</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2014-09-24 11:49:17</td>
+<td style="text-align: left;">Sienna Le</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">yo butt!!!!!!!!</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9999999999999999999999999999999999999999999999999999999999999999999999999999999999</td>
+<td style="text-align: left;">Sam is in the phillipenes! Yaya</td>
+</tr>
+</tbody>
+</table>
+</div>
+
 </div>
 </div>
 

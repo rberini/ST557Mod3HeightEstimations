@@ -28,6 +28,7 @@ library(tidyverse)
 library(janitor)
 library(measurements)
 library(knitr)
+library(kableExtra)
 
 conflicts_prefer(dplyr::lag)
 conflicts_prefer(dplyr::filter)
@@ -102,8 +103,8 @@ height_est_sample |>
 
 ```{r}
 height_est_sample <- height_est_sample |>
-  mutate(across(c(height_cols), ~ .x |>
-    str_replace_all("'|-|(feet?|foot|ft|feeet|toot|fot|oot|feat)\\b", " ft ") |>
+  mutate(across(all_of(height_cols), ~ .x |>
+    str_replace_all("'|-|,|(feet?|foot|ft|feeet|toot|fot|oot|feat)\\b", " ft ") |>
     str_replace_all("\"|(inches?|inch|in|inces|invhes)\\b", " inch ") |>
     str_replace_all("(meters?|metres?)\\b", " m ") |>
     str_replace_all("(centimeters?|centimetres?|cent|cm)\\b", " cm ") |>
@@ -114,7 +115,54 @@ height_est_sample <- height_est_sample |>
 ```{r}
 height_est_sample |>
   select(your_estimate) |>
-  arrange(your_estimate) |>
-  kable()
+  mutate(
+    first_num = parse_number(your_estimate),
+    after_first = str_replace(your_estimate, "^\\d+", ""),
+    second_num = parse_number(after_first)
+  ) |>
+  arrange(first_num, second_num, your_estimate) |>
+  select(your_estimate, first_num) |>
+  kable() |>
+  kable_styling() |>
+  scroll_box(width = "100%", height = "400px")
+```
+
+```{r}
+height_est_sample_mod <- height_est_sample |>
+ mutate(
+   estimate_cm = case_when(
+     is.na(your_estimate) | str_trim(your_estimate) == "" ~ NA_real_,
+     !str_detect(your_estimate, "\\d+\\.?\\d*") ~ NA_real_,
+     str_detect(your_estimate, "ft") & str_detect(your_estimate, "inch") ~ {
+       numbers <- as.numeric(str_extract_all(your_estimate, "\\d+\\.?\\d*")[[1]])
+       if (length(numbers) >= 2) {
+         conv_unit(numbers[1], "ft", "cm") + conv_unit(numbers[2], "inch", "cm")
+       } else NA_real_
+     },
+     str_detect(your_estimate, "\\bcm\\b") ~ as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*")),
+     str_detect(your_estimate, "\\bm\\b") ~ conv_unit(as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*")), "m", "cm"),
+     str_detect(your_estimate, "\\bft\\b") ~ conv_unit(as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*")), "ft", "cm"),
+     str_detect(your_estimate, "\\binch\\b") ~ conv_unit(as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*")), "inch", "cm"),
+     TRUE ~ {
+       num <- as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*"))
+       case_when(
+         num < 4 ~ conv_unit(num, "m", "cm"),
+         num >= 4 & num < 20 ~ conv_unit(num, "ft", "cm"),
+         num >= 20 & num <= 120 ~ conv_unit(num, "inch", "cm"),
+         num > 120 & num <= 250 ~ num,
+         TRUE ~ NA_real_
+       )
+     }
+   )
+ ) |>
+ select(timestamp, your_name, estimate_cm, your_estimate, whats_too_low, whats_too_high, your_reasoning)
+```
+
+```{r}
+height_est_sample_mod |>
+  arrange(estimate_cm) |>
+  kable() |>
+  kable_styling() |>
+  scroll_box(width = "100%", height = "400px")
 ```
 
