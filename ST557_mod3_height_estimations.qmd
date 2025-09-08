@@ -3,6 +3,9 @@ title: "Using Data Moves to Make Sense of Height Estimates"
 author: "Robert Berini"
 format: html
 editor: visual
+execute:
+  warning: false
+  message: false
 ---
 
 # Data Moves for Making Sense of Height Estimations
@@ -18,7 +21,7 @@ In considering the height, students are asked to give
 -   a specific estimate for the height
 -   provide a rationale for their estimate
 
-## Load Required Packages
+## Load Packages and Set Options
 
 ```{r}
 library(conflicted)
@@ -29,11 +32,16 @@ library(janitor)
 library(measurements)
 library(knitr)
 library(kableExtra)
+library(showtext)
 
 conflicts_prefer(dplyr::lag)
 conflicts_prefer(dplyr::filter)
 
 options(scipen = 999, digits = 2)
+
+font_add_google("Roboto", "Roboto")
+font_add_google("Roboto Mono", "Roboto Mono")
+showtext_auto()
 ```
 
 ## Import and Examine Data
@@ -42,9 +50,13 @@ options(scipen = 999, digits = 2)
 height_est <- read_csv("Day 01 Height Estimates from Fergussen.csv")
 ```
 
+Scan the data and check for missing values
+
 ```{r}
 skim(height_est)
 ```
+
+Remove missing rows, create easier to use variable names, and give timestamp correct type
 
 ```{r}
 height_est <- height_est |>
@@ -59,12 +71,16 @@ glimpse(height_est)
 
 ## Sample Data
 
+Create a sample of 200 observations using simple random sampling
+
 ```{r}
 set.seed(557)
 
 height_est_sample <- height_est |>
   slice_sample(n = 200)
 ```
+
+Scan and clean sample observations
 
 ```{r}
 glimpse(height_est_sample)
@@ -87,82 +103,129 @@ height_est_sample <- height_est_sample |>
 skim(height_est_sample)
 ```
 
+Get a sense of frequency of measurement units
+
 ```{r}
 height_est_sample |>
  summarise(
    across(all_of(height_cols), 
           list(
-            feet = ~ sum(str_detect(.x, "'|(feet?|foot|ft|feeet|toot|fot|oot)\\b"), na.rm = TRUE),
-            inch = ~ sum(str_detect(.x, "\"|(inches?|inch|in)\\b"), na.rm = TRUE),
-            meter = ~ sum(str_detect(.x, "(meters?|metres?)\\b|(?<!c)m\\b"), na.rm = TRUE),
-            cm = ~ sum(str_detect(.x, "(centimeters?|centimetres?|cent|cm)\\b"), na.rm = TRUE)
+            feet = ~ sum(str_detect(.x, "'|(feet|foot|ft|feeet|toot|fot|oot|feat)\\b"), na.rm = TRUE),
+            inch = ~ sum(str_detect(.x, "\"|(inches|inch|in|inces|invhes)\\b"), na.rm = TRUE),
+            meter = ~ sum(str_detect(.x, "(meters|metres|meter|metre)\\b|(?<!c)m\\b"), na.rm = TRUE),
+            cm = ~ sum(str_detect(.x, "(centimeters|centimetres|cent|cm)\\b"), na.rm = TRUE)
           ),
           .names = "{.col}_{.fn}")
  )
 ```
 
-```{r}
-height_est_sample <- height_est_sample |>
-  mutate(across(all_of(height_cols), ~ .x |>
-    str_replace_all("'|-|,|(feet?|foot|ft|feeet|toot|fot|oot|feat)\\b", " ft ") |>
-    str_replace_all("\"|(inches?|inch|in|inces|invhes)\\b", " inch ") |>
-    str_replace_all("(meters?|metres?)\\b", " m ") |>
-    str_replace_all("(centimeters?|centimetres?|cent|cm)\\b", " cm ") |>
-    str_replace_all("(?<!c)m\\b", " m ")
-  ))
-```
-
-```{r}
-height_est_sample |>
-  select(your_estimate) |>
-  mutate(
-    first_num = parse_number(your_estimate),
-    after_first = str_replace(your_estimate, "^\\d+", ""),
-    second_num = parse_number(after_first)
-  ) |>
-  arrange(first_num, second_num, your_estimate) |>
-  select(your_estimate, first_num) |>
-  kable() |>
-  kable_styling() |>
-  scroll_box(width = "100%", height = "400px")
-```
+Attempt to programmatically apply consistent unit designations in anticipation of using *measurements* package to convert all to cm
 
 ```{r}
 height_est_sample_mod <- height_est_sample |>
- mutate(
-   estimate_cm = case_when(
-     is.na(your_estimate) | str_trim(your_estimate) == "" ~ NA_real_,
-     !str_detect(your_estimate, "\\d+\\.?\\d*") ~ NA_real_,
-     str_detect(your_estimate, "ft") & str_detect(your_estimate, "inch") ~ {
-       numbers <- as.numeric(str_extract_all(your_estimate, "\\d+\\.?\\d*")[[1]])
-       if (length(numbers) >= 2) {
-         conv_unit(numbers[1], "ft", "cm") + conv_unit(numbers[2], "inch", "cm")
-       } else NA_real_
-     },
-     str_detect(your_estimate, "\\bcm\\b") ~ as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*")),
-     str_detect(your_estimate, "\\bm\\b") ~ conv_unit(as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*")), "m", "cm"),
-     str_detect(your_estimate, "\\bft\\b") ~ conv_unit(as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*")), "ft", "cm"),
-     str_detect(your_estimate, "\\binch\\b") ~ conv_unit(as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*")), "inch", "cm"),
-     TRUE ~ {
-       num <- as.numeric(str_extract(your_estimate, "\\d+\\.?\\d*"))
-       case_when(
-         num < 4 ~ conv_unit(num, "m", "cm"),
-         num >= 4 & num < 20 ~ conv_unit(num, "ft", "cm"),
-         num >= 20 & num <= 120 ~ conv_unit(num, "inch", "cm"),
-         num > 120 & num <= 250 ~ num,
-         TRUE ~ NA_real_
-       )
-     }
-   )
- ) |>
- select(timestamp, your_name, estimate_cm, your_estimate, whats_too_low, whats_too_high, your_reasoning)
+  mutate(across(all_of(height_cols), ~ .x |>
+    str_replace_all("'|(feet|foot|ft|feeet|toot|fot|oot|feat)\\b", " ft ") |>
+    str_replace_all("\"|(inches|inch|in|inces|invhes)\\b", " inch ") |>
+    str_replace_all("(meters|metres|meter|metre)\\b", " m ") |>
+    str_replace_all("(centimeters|centimetres|cent|cm)\\b", " cm ") |>
+    str_replace_all("(?<!c)m\\b", " m "),
+    .names = "{.col}_mod"))
 ```
 
 ```{r}
 height_est_sample_mod |>
-  arrange(estimate_cm) |>
+  select(
+    timestamp,
+    your_name,
+    your_estimate_mod,
+    your_estimate,
+    whats_too_low_mod,
+    whats_too_low,
+    whats_too_high_mod,
+    whats_too_high,
+    your_reasoning
+  ) |>
   kable() |>
   kable_styling() |>
   scroll_box(width = "100%", height = "400px")
+```
+
+Given the complexity of the task and the inadequancy of my coding skills, I gave up at this point in trying to reconcile the units present. A significant portion of the height estimates remained in a format which could not be confidently converted to a numeric value in a common unit.
+
+The following code blocks use a simpler, although less defensible approach, of ignoring the various unit designations, and instead just extracting the numbers and using reasonable ranges to approximate the intended unit. This allowed me to move forward in my analysis. The below therefore is indicative of some steps I would have taken if I could have eventually coerced at least the "your_estimate_mod" column into a usbale state.
+
+```{r}
+height_est_sample_mod_2 <- height_est_sample_mod |>
+ mutate(
+   estimate_cm = map_dbl(your_estimate, function(text) {
+     if (is.na(text) || str_trim(text) == "") return(NA_real_)
+     
+     numbers <- as.numeric(str_extract_all(text, "\\d+\\.?\\d*")[[1]])
+     if (length(numbers) == 0) return(NA_real_)
+     
+     tryCatch({
+       first_num <- numbers[1]
+       
+       if (first_num < 3) {
+         conv_unit(first_num, "m", "cm")
+       } else if (first_num > 100) {
+         first_num
+       } else if (first_num >= 50 && first_num <= 100) {
+         conv_unit(first_num, "inch", "cm")
+       } else if (first_num >= 3 && first_num < 9) {
+         if (length(numbers) >= 2 && numbers[2] <= 12) {
+           conv_unit(first_num, "ft", "cm") + conv_unit(numbers[2], "inch", "cm")
+         } else {
+           conv_unit(first_num, "ft", "cm")
+         }
+       } else if (first_num >= 9 && first_num < 50) {
+         conv_unit(first_num, "inch", "cm")
+       } else {
+         NA_real_
+       }
+     }, error = function(e) NA_real_)
+   })
+ )
+```
+
+Get summary statistics for height estimate
+
+```{r}
+describe(height_est_sample_mod_2$estimate_cm)
+```
+
+Compare with trimmed mean
+
+```{r}
+mean(height_est_sample_mod_2$estimate_cm, trim = 0.1, na.rm = TRUE)
+```
+
+Visualize distribution of height estimates
+
+```{r}
+height_est_sample_mod_2 |>
+  filter(!is.na(estimate_cm)) |>
+  ggplot(aes(x = estimate_cm)) +
+  geom_histogram(binwidth = 5, fill = "#CC0000", color = "#000000") +
+  labs(
+    title = "Histogram of Height Estimates (cm)",
+    x = "Height Estimate (cm)",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+```
+
+Visualize with boxplot to better consider outliers
+
+```{r}
+height_est_sample_mod_2 |>
+  filter(!is.na(estimate_cm)) |>
+  ggplot(aes(y = estimate_cm)) +
+  geom_boxplot(fill = "#CC0000", color = "#000000") +
+  labs(
+    title = "Boxplot of Height Estimates (cm)",
+    y = "Height Estimate (cm)"
+  ) +
+  theme_minimal()
 ```
 
