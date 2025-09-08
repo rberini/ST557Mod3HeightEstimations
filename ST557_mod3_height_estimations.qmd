@@ -62,7 +62,10 @@ Remove missing rows, create easier to use variable names, and give timestamp cor
 height_est <- height_est |>
   mutate(Timestamp = mdy_hms(Timestamp)) |>
   clean_names() |>
-  filter(!(is.na(whats_too_low) & is.na(whats_too_high) & is.na(your_estimate)))
+  filter(!(
+    is.na(whats_too_low) &
+      is.na(whats_too_high) & is.na(your_estimate)
+  ))
 ```
 
 ```{r}
@@ -107,29 +110,46 @@ Get a sense of frequency of measurement units
 
 ```{r}
 height_est_sample |>
- summarise(
-   across(all_of(height_cols), 
-          list(
-            feet = ~ sum(str_detect(.x, "'|(feet|foot|ft|feeet|toot|fot|oot|feat)\\b"), na.rm = TRUE),
-            inch = ~ sum(str_detect(.x, "\"|(inches|inch|in|inces|invhes)\\b"), na.rm = TRUE),
-            meter = ~ sum(str_detect(.x, "(meters|metres|meter|metre)\\b|(?<!c)m\\b"), na.rm = TRUE),
-            cm = ~ sum(str_detect(.x, "(centimeters|centimetres|cent|cm)\\b"), na.rm = TRUE)
-          ),
-          .names = "{.col}_{.fn}")
- )
+  summarise(across(
+    all_of(height_cols),
+    list(
+      feet = ~ sum(
+        str_detect(.x, "'|(feet|foot|ft|feeet|toot|fot|oot|feat)\\b"),
+        na.rm = TRUE
+      ),
+      inch = ~ sum(
+        str_detect(.x, "\"|(inches|inch|in|inces|invhes)\\b"),
+        na.rm = TRUE
+      ),
+      meter = ~ sum(
+        str_detect(.x, "(meters|metres|meter|metre)\\b|(?<!c)m\\b"),
+        na.rm = TRUE
+      ),
+      cm = ~ sum(
+        str_detect(.x, "(centimeters|centimetres|cent|cm)\\b"),
+        na.rm = TRUE
+      )
+    ),
+    .names = "{.col}_{.fn}"
+  ))
 ```
 
 Attempt to programmatically apply consistent unit designations in anticipation of using *measurements* package to convert all to cm
 
 ```{r}
 height_est_sample_mod <- height_est_sample |>
-  mutate(across(all_of(height_cols), ~ .x |>
-    str_replace_all("'|(feet|foot|ft|feeet|toot|fot|oot|feat)\\b", " ft ") |>
-    str_replace_all("\"|(inches|inch|in|inces|invhes)\\b", " inch ") |>
-    str_replace_all("(meters|metres|meter|metre)\\b", " m ") |>
-    str_replace_all("(centimeters|centimetres|cent|cm)\\b", " cm ") |>
-    str_replace_all("(?<!c)m\\b", " m "),
-    .names = "{.col}_mod"))
+  mutate(
+    across(
+      all_of(height_cols),
+      ~ .x |>
+        str_replace_all("'|(feet|foot|ft|feeet|toot|fot|oot|feat)\\b", " ft ") |>
+        str_replace_all("\"|(inches|inch|in|inces|invhes)\\b", " inch ") |>
+        str_replace_all("(meters|metres|meter|metre)\\b", " m ") |>
+        str_replace_all("(centimeters|centimetres|cent|cm)\\b", " cm ") |>
+        str_replace_all("(?<!c)m\\b", " m "),
+      .names = "{.col}_mod"
+    )
+  )
 ```
 
 ```{r}
@@ -156,36 +176,37 @@ The following code blocks use a simpler, although less defensible approach, of i
 
 ```{r}
 height_est_sample_mod_2 <- height_est_sample_mod |>
- mutate(
-   estimate_cm = map_dbl(your_estimate, function(text) {
-     if (is.na(text) || str_trim(text) == "") return(NA_real_)
-     
-     numbers <- as.numeric(str_extract_all(text, "\\d+\\.?\\d*")[[1]])
-     if (length(numbers) == 0) return(NA_real_)
-     
-     tryCatch({
-       first_num <- numbers[1]
-       
-       if (first_num < 3) {
-         conv_unit(first_num, "m", "cm")
-       } else if (first_num > 100) {
-         first_num
-       } else if (first_num >= 50 && first_num <= 100) {
-         conv_unit(first_num, "inch", "cm")
-       } else if (first_num >= 3 && first_num < 9) {
-         if (length(numbers) >= 2 && numbers[2] <= 12) {
-           conv_unit(first_num, "ft", "cm") + conv_unit(numbers[2], "inch", "cm")
-         } else {
-           conv_unit(first_num, "ft", "cm")
-         }
-       } else if (first_num >= 9 && first_num < 50) {
-         conv_unit(first_num, "inch", "cm")
-       } else {
-         NA_real_
-       }
-     }, error = function(e) NA_real_)
-   })
- )
+  mutate(estimate_cm = map_dbl(your_estimate, function(text) {
+    if (is.na(text) || str_trim(text) == "")
+      return(NA_real_)
+    
+    numbers <- as.numeric(str_extract_all(text, "\\d+\\.?\\d*")[[1]])
+    if (length(numbers) == 0)
+      return(NA_real_)
+    
+    tryCatch({
+      first_num <- numbers[1]
+      
+      if (first_num < 3) {
+        conv_unit(first_num, "m", "cm")
+      } else if (first_num > 100) {
+        first_num
+      } else if (first_num >= 50 && first_num <= 100) {
+        conv_unit(first_num, "inch", "cm")
+      } else if (first_num >= 3 && first_num < 9) {
+        if (length(numbers) >= 2 && numbers[2] <= 12) {
+          conv_unit(first_num, "ft", "cm") + conv_unit(numbers[2], "inch", "cm")
+        } else {
+          conv_unit(first_num, "ft", "cm")
+        }
+      } else if (first_num >= 9 && first_num < 50) {
+        conv_unit(first_num, "inch", "cm")
+      } else {
+        NA_real_
+      }
+    }, error = function(e)
+      NA_real_)
+  }))
 ```
 
 Get summary statistics for height estimate
@@ -206,13 +227,10 @@ Visualize distribution of height estimates
 height_est_sample_mod_2 |>
   filter(!is.na(estimate_cm)) |>
   ggplot(aes(x = estimate_cm)) +
-  geom_histogram(binwidth = 5, fill = "#CC0000", color = "#000000") +
-  labs(
-    title = "Histogram of Height Estimates (cm)",
-    x = "Height Estimate (cm)",
-    y = "Frequency"
-  ) +
-  theme_minimal()
+  geom_histogram(binwidth = 5, fill = "#CC0000") +
+  labs(title = "Histogram of Height Estimates (cm)", x = "Height Estimate (cm)", y = "Frequency") +
+  theme_minimal() +
+  theme(text = element_text(family = "Roboto"))
 ```
 
 Visualize with boxplot to better consider outliers
@@ -221,11 +239,9 @@ Visualize with boxplot to better consider outliers
 height_est_sample_mod_2 |>
   filter(!is.na(estimate_cm)) |>
   ggplot(aes(y = estimate_cm)) +
-  geom_boxplot(fill = "#CC0000", color = "#000000") +
-  labs(
-    title = "Boxplot of Height Estimates (cm)",
-    y = "Height Estimate (cm)"
-  ) +
-  theme_minimal()
+  geom_boxplot(fill = "#CC0000") +
+  labs(title = "Boxplot of Height Estimates (cm)", y = "Height Estimate (cm)") +
+  theme_minimal() +
+  theme(text = element_text(family = "Roboto"))
 ```
 
